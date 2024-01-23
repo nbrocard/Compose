@@ -1,6 +1,7 @@
 package fr.freebox.composedays.ui.component
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import fr.freebox.composedays.ui.theme.ExtendedTheme
 
 @Composable
 fun FbxPrimaryButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}) {
+    Log.d("TESTOUZE", "Compose button $text")
     Button(
         onClick = onClick,
         colors = FbxButtonDefaults.primaryButtonColors,
@@ -46,6 +48,7 @@ fun FbxPrimaryButton(text: String, modifier: Modifier = Modifier, enabled: Boole
 
 @Composable
 fun FbxSecondaryButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}) {
+    Log.d("TESTOUZE", "Compose button $text")
     OutlinedButton(
         onClick = onClick,
         colors = FbxButtonDefaults.secondaryButtonColors,
