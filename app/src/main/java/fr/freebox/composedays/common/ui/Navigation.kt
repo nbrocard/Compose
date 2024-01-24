@@ -6,10 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import fr.freebox.composedays.common.model.HomeDestination
-import fr.freebox.composedays.common.model.MainGraph
 import fr.freebox.composedays.common.model.mainGraph
 import fr.freebox.composedays.common.model.route
+import fr.freebox.composedays.home.model.HomeDestination
 
 @Composable
 fun MainNavigation(navController: NavHostController = rememberNavController()) {

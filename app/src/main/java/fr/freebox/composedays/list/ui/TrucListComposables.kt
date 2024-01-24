@@ -9,58 +9,45 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.freebox.composedays.common.model.LoadingState
-import fr.freebox.composedays.common.model.MainGraph
-import fr.freebox.composedays.common.ui.SimpleBaseScreen
+import fr.freebox.composedays.common.ui.SimpleLoadingBaseScreen
 import fr.freebox.composedays.list.model.Truc
-import fr.freebox.composedays.list.viewmodel.ListViewModel
 import fr.freebox.composedays.ui.component.FbxPrimaryButton
 import fr.freebox.composedays.ui.theme.ComposeDaysTheme
 
-@Composable
-fun ListScreen(viewModel: ListViewModel = viewModel(), onNavigate: (MainGraph) -> Unit = {}) {
-    val trucs by viewModel.trucs.observeAsState(emptyList())
-    val loadingState by viewModel.loadingState.collectAsState()
-
-    ListScreenContent(trucs = trucs, loadingState = loadingState, viewModel::onReloadButtonClicked)
-}
 
 @Composable
-private fun ListScreenContent(
-    trucs: List<Truc>,
-    loadingState: LoadingState,
-    onReloadButtonClicked: () -> Unit = {}
+fun TrucListScreenContent(
+    title: String,
+    loadingState: LoadingState<List<Truc>>,
+    onReloadButtonClicked: () -> Unit = {},
+    onItemClick: (Truc) -> Unit = {}
 ) {
-    SimpleBaseScreen("List de trucs", loadingState = loadingState) {
+    SimpleLoadingBaseScreen("Liste de $title", loadingState = loadingState) { trucs ->
         Column(modifier = Modifier.fillMaxSize()) {
-            Column {
-                TrucList(trucs = trucs, onReloadButtonClicked)
-            }
+            TrucList(trucs = trucs, onReloadButtonClicked, onItemClick)
         }
     }
 }
 
 @Composable
-private fun TrucList(trucs: List<Truc>, onReloadButtonClicked: () -> Unit) {
+private fun TrucList(trucs: List<Truc>, onReloadButtonClicked: () -> Unit, onItemClick: (Truc) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 24.dp)
-            .fillMaxWidth()
+            .fillMaxSize()
     ) {
         items(trucs) {
-            TrucItem(truc = it)
+            TrucItem(truc = it) { onItemClick(it) }
         }
         item {
             Box(
@@ -70,6 +57,17 @@ private fun TrucList(trucs: List<Truc>, onReloadButtonClicked: () -> Unit) {
             ) {
                 FbxPrimaryButton(text = "Reload", onClick = onReloadButtonClicked)
             }
+        }
+    }
+}
+
+
+@Composable
+private fun TrucItem(truc: Truc, onClick: () -> Unit) {
+    Card(onClick = onClick) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(8.dp)) {
+            Text(text = truc.name, modifier = Modifier)
+            Text(text = "(${truc.subtitle})")
         }
     }
 }
@@ -84,26 +82,10 @@ private class TrucsProvider : PreviewParameterProvider<List<Truc>> {
     )
 }
 
-@Composable
-private fun TrucItem(truc: Truc) {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(text = truc.name, modifier = Modifier)
-        Text(text = truc.subtitle)
-    }
-}
-
 @Preview
 @Composable
 private fun Preview(@PreviewParameter(TrucsProvider::class) trucs: List<Truc>) {
     ComposeDaysTheme {
-        ListScreenContent(trucs, LoadingState.Done)
-    }
-}
-
-@Preview
-@Composable
-private fun RunnablePreview() {
-    ComposeDaysTheme {
-        ListScreen()
+        TrucListScreenContent("Trucs", LoadingState.Done(trucs))
     }
 }

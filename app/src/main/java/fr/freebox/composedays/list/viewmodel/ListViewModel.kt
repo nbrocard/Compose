@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.freebox.composedays.common.model.LoadingState
 import fr.freebox.composedays.list.model.Truc
-import fr.freebox.composedays.list.model.TrucListArguments
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,12 +18,13 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
     private val count = checkNotNull(savedStateHandle.get<Int>("numberOfTrucs"))
+    private val parent = checkNotNull(savedStateHandle.get<String>("parent"))
 
-    private val _trucs = MutableLiveData<List<Truc>>()
-    val trucs: LiveData<List<Truc>> = _trucs
+    private val _loadingState = MutableStateFlow<LoadingState<List<Truc>>>(LoadingState.Loading())
+    val loadingState: StateFlow<LoadingState<List<Truc>>> = _loadingState.asStateFlow()
 
-    private val _loadingState = MutableStateFlow<LoadingState>(LoadingState.Loading)
-    val loadingState: StateFlow<LoadingState> = _loadingState.asStateFlow()
+    private val _title = MutableLiveData(parent)
+    val title: LiveData<String> = _title
 
     init {
         loadData()
@@ -40,22 +40,21 @@ class ListViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : Vi
             delay(2000)
             onData(
                 (0..<count).map {
-                    Truc("truc trop cool $it", it, "lol")
+                    Truc("truc trop cool $it", it, "sous-truc de $it")
                 }
             )
         }
     }
 
     private fun onData(trucs: List<Truc>) {
-        _trucs.value = trucs
-        setDone()
+        setDone(trucs)
     }
 
     private fun setLoading() {
-        _loadingState.value = LoadingState.Loading
+        _loadingState.value = LoadingState.Loading()
     }
 
-    private fun setDone() {
-        _loadingState.value = LoadingState.Done
+    private fun setDone(trucs: List<Truc>) {
+        _loadingState.value = LoadingState.Done(trucs)
     }
 }

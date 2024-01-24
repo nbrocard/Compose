@@ -1,6 +1,6 @@
 package fr.freebox.composedays.common.model
 
-sealed interface LoadingState {
-    data object Loading : LoadingState
-    data object Done : LoadingState
+sealed interface LoadingState<T> {
+    class Loading<T> : LoadingState<T>
+    data class Done<T>(val data: T) : LoadingState<T>
 }
