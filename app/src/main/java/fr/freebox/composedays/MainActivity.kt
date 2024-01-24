@@ -4,16 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import fr.freebox.composedays.common.ui.BaseScreen
-import fr.freebox.composedays.home.ui.HomeScreen
-import fr.freebox.composedays.ui.component.FbxLinkButton
-import fr.freebox.composedays.ui.component.FbxPrimaryButton
-import fr.freebox.composedays.ui.component.FbxSecondaryButton
+import fr.freebox.composedays.common.ui.MainNavigation
 import fr.freebox.composedays.ui.theme.ComposeDaysTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,20 +21,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Content(Modifier.fillMaxWidth())
+            Content()
         }
     }
 }
 
 @Composable
-fun Content(modifier: Modifier = Modifier) {
+fun Content() {
     ComposeDaysTheme {
-        HomeScreen()
+        MainNavigation()
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 fun GreetingPreview() {
-    Content(Modifier.fillMaxWidth())
+    Content()
 }

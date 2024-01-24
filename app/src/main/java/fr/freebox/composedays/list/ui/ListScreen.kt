@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,6 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.freebox.composedays.common.model.LoadingState
+import fr.freebox.composedays.common.model.MainGraph
 import fr.freebox.composedays.common.ui.SimpleBaseScreen
 import fr.freebox.composedays.list.model.Truc
 import fr.freebox.composedays.list.viewmodel.ListViewModel
@@ -27,7 +30,7 @@ import fr.freebox.composedays.ui.component.FbxPrimaryButton
 import fr.freebox.composedays.ui.theme.ComposeDaysTheme
 
 @Composable
-fun ListScreen(viewModel: ListViewModel = viewModel()) {
+fun ListScreen(viewModel: ListViewModel = viewModel(), onNavigate: (MainGraph) -> Unit = {}) {
     val trucs by viewModel.trucs.observeAsState(emptyList())
     val loadingState by viewModel.loadingState.collectAsState()
 
@@ -43,28 +46,30 @@ private fun ListScreenContent(
     SimpleBaseScreen("List de trucs", loadingState = loadingState) {
         Column(modifier = Modifier.fillMaxSize()) {
             Column {
-                TrucList(trucs = trucs)
-                Box(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .fillMaxWidth(), contentAlignment = Alignment.BottomCenter
-                ) {
-                    FbxPrimaryButton(text = "Reload", onClick = onReloadButtonClicked)
-                }
+                TrucList(trucs = trucs, onReloadButtonClicked)
             }
         }
     }
 }
 
 @Composable
-private fun TrucList(trucs: List<Truc>) {
-    Column(
+private fun TrucList(trucs: List<Truc>, onReloadButtonClicked: () -> Unit) {
+    LazyColumn(
         modifier = Modifier
             .padding(horizontal = 24.dp)
             .fillMaxWidth()
     ) {
-        trucs.forEach {
+        items(trucs) {
             TrucItem(truc = it)
+        }
+        item {
+            Box(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth(), contentAlignment = Alignment.BottomCenter
+            ) {
+                FbxPrimaryButton(text = "Reload", onClick = onReloadButtonClicked)
+            }
         }
     }
 }

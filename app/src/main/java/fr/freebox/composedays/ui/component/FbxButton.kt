@@ -35,7 +35,6 @@ import fr.freebox.composedays.ui.theme.ExtendedTheme
 
 @Composable
 fun FbxPrimaryButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}) {
-    Log.d("TESTOUZE", "Compose button $text")
     Button(
         onClick = onClick,
         colors = FbxButtonDefaults.primaryButtonColors,
@@ -48,7 +47,6 @@ fun FbxPrimaryButton(text: String, modifier: Modifier = Modifier, enabled: Boole
 
 @Composable
 fun FbxSecondaryButton(text: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}) {
-    Log.d("TESTOUZE", "Compose button $text")
     OutlinedButton(
         onClick = onClick,
         colors = FbxButtonDefaults.secondaryButtonColors,
