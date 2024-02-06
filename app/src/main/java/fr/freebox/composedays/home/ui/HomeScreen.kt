@@ -8,7 +8,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import fr.freebox.composedays.common.model.MainGraph
 import fr.freebox.composedays.common.model.composable
-import fr.freebox.composedays.common.model.navigateToDirection
 import fr.freebox.composedays.home.model.HomeDestination
 import fr.freebox.composedays.home.viewmodel.HomeViewModel
 
@@ -17,9 +16,7 @@ fun NavGraphBuilder.homeScreen(navController: NavController) {
         val viewModel: HomeViewModel = viewModel()
 
         HomeScreen(viewModel) {
-            when (it) {
-                is MainGraph.HomeDirection.TrucList -> navController.navigateToDirection(it)
-            }
+
         }
     }
 }
@@ -34,8 +31,8 @@ fun HomeScreen(
         when (it) {
             HomeButton.INCREMENT -> viewModel.onIncrementButtonClicked()
             HomeButton.DECREMENT -> viewModel.onDecrementButtonClicked()
-            HomeButton.TRUC_1 -> onNavigate(MainGraph.HomeDirection.TrucList(3, "petit truc"))
-            HomeButton.TRUC2 -> onNavigate(MainGraph.HomeDirection.TrucList(442, "plein de trucs"))
+            HomeButton.TRUC_1 -> TODO()
+            HomeButton.TRUC2 -> TODO()
         }
     }
 }
