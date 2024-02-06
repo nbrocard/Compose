@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.freebox.composedays.common.model.LoadingState
+import fr.freebox.composedays.data.TrucDataSource
 import fr.freebox.composedays.list.model.Truc
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,11 +38,9 @@ class ListViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : Vi
     private fun loadData() {
         viewModelScope.launch {
             setLoading()
-            delay(2000)
+            delay(1000)
             onData(
-                (0..<count).map {
-                    Truc("truc trop cool $it", it, "sous-truc de $it")
-                }
+                (0..<count).map(TrucDataSource::getTruc)
             )
         }
     }
